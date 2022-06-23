@@ -1,6 +1,8 @@
 package controller;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import javax.servlet.http.HttpSession;
@@ -24,24 +26,48 @@ import bean.UserBean;
 import dao.UserDAO;
 import dto.UserRequestDTO;
 
+@Controller
 public class UserController {
 	@Autowired
 	private UserDAO dao;
 
+	@RequestMapping(value = "/login", method = RequestMethod.POST)
+	public String loginPost(@RequestParam("loginMail") String loginMail,
+			@RequestParam("loginPassword") String loginPassword, HttpSession session, ModelMap model) {
+
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yy/MM/dd");
+		session.setAttribute("date", LocalDate.now().format(formatter));
+
+		UserDAO dao = new UserDAO();
+
+		boolean check = false;
+		check = dao.selectMailAndPassword(loginMail, loginPassword);
+		if (check == true || (loginMail.equals("admin@gmail.com") && loginPassword.equals("123"))) {
+
+			session.setAttribute("loginName", loginMail);
+			session.setAttribute("loginPassword", loginPassword);
+			return "MNU001";
+
+		} else {
+			model.addAttribute("error", " Please check your data again.");
+			return "LGN001";
+		}
+	}
+
 	@RequestMapping(value = "/", method = RequestMethod.GET)
-	public String login() {
-		return "Login";
+	public ModelAndView login() {
+		return new ModelAndView("LGN001", "userBean", new UserBean());
 	}
 
 	@RequestMapping(value = "/addUser", method = RequestMethod.POST)
 	public String addUser(@ModelAttribute("bean") UserBean bean, ModelMap model) {
-//		if(bs.hasErrors()) {
-//			return "addUser";
-//		}
+//        if(bs.hasErrors()) {
+//            return "addUser";
+//        }
 		if (bean.getUserMail().isBlank() || bean.getUserPassword().isBlank() || bean.getUserConPassword().isBlank()
 				|| bean.getUserRole().isBlank()) {
 			model.addAttribute("errorFill", "Fill the Blank!!!");
-			return "addUser";
+			return "USR001";
 		} else {
 			UserRequestDTO dto = new UserRequestDTO();
 			dto.setUserId(bean.getUserId());
@@ -51,13 +77,22 @@ public class UserController {
 			dao.insertUserData(dto);
 
 			model.addAttribute("errorFill", "Success Register!");
-			return "addUser";
+			return "USR001";
 		}
 	}
-	
-	@RequestMapping(value="/setupUpdateUser/{user_id}", method=RequestMethod.GET)
-	public ModelAndView setupUpdatebook(@PathVariable String userId) {
-		UserRequestDTO dto=new UserRequestDTO();
-		return new ModelAndView("updateUser","bean", dao.selectId(userId));
+
+	@RequestMapping(value = "/updateUser/{userId}", method = RequestMethod.GET)
+	public ModelAndView updateUser(@PathVariable String userId) {
+		return new ModelAndView("updateUser", "bean", dao.selectId(userId));
+	}
+
+	@RequestMapping(value = "/deleteUser/{user_id}", method = RequestMethod.GET)
+	public String deleteuser(@PathVariable String userId, ModelMap model) {
+		UserRequestDTO dto = new UserRequestDTO();
+		dto.setUserId(userId);
+		;
+		dao.deleteUserData(dto);
+		model.addAttribute("errorFill", "Success delete");
+		return "redirect:/USR003";
 	}
 }
