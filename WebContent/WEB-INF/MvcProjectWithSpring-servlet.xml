@@ -20,16 +20,16 @@ http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 
 <bean id="userDAO" class="dao.UserDAO"></bean>
 <bean id="courseDAO" class="dao.CourseDAO"></bean>
-<bean id="studentDAO" class="dao.StudentDAO"></bean>
-<!-- <bean id="studentDao" class="MvcProjectWithSpring.dao.StudentDAO"></bean> -->
+<bean id="studentDao" class="dao.StudentDAO"></bean>
 
-<mvc:resources mapping="/pages/" location="/WEB-INF/pages/" />
-<mvc:resources mapping="/resources/theme/" location="/resources/theme/" cache-period="31556926"/>
+
+<mvc:resources mapping="/pages/**" location="/WEB-INF/pages/" />
+<mvc:resources mapping="/resources/theme/**" location="/resources/theme/" cache-period="31556926"/>
 <mvc:annotation-driven/>
 
 
 <bean class="org.springframework.context.support.ResourceBundleMessageSource">
 <property name="basename" value="messages"></property>
 </bean>
-<!-- <bean id = "userValidator" class = "MvcProjectWithSpring.controller.UserValidator" /> -->
-</beans>
+<!-- <bean id = "userValidator" class = "MvcProjectWithSpring.controller.UserValidator" /> -->	
+</beans> 

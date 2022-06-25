@@ -10,6 +10,7 @@ public class CourseRequestDTO {
 	public void setId(int id) {
 		this.id = id;
 	}
+	
 	public String getCourseName() {
 		return courseName;
 	}

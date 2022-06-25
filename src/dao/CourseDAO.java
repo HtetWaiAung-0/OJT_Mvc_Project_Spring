@@ -81,7 +81,7 @@ public class CourseDAO {
 
 	}
 	
-	public ArrayList<CourseResponseDTO> selectAll(){
+	public ArrayList<CourseResponseDTO> selectAllCourse(){
 		ArrayList<CourseResponseDTO> list = new ArrayList<>();
 		String sql = "select * from course";
 		try {
@@ -93,6 +93,7 @@ public class CourseDAO {
 				list.add(res);
 			}
 		} catch (SQLException e) {
+			System.out.println("error select course");
 			e.printStackTrace();
 		}
 		return list;

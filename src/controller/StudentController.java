@@ -20,26 +20,33 @@ import bean.UserBean;
 import dao.CourseDAO;
 import dao.CourseStudentDAO;
 import dao.StudentDAO;
+import dto.CourseResponseDTO;
 import dto.CourseStudentRequestDTO;
 import dto.CourseStudentResponseDTO;
 import dto.StudentRequestDTO;
 import dto.StudentResponseDTO;
 import dto.UserRequestDTO;
+import dto.UserResponseDTO;
 
 @Controller
 public class StudentController {
 	
 	 @Autowired
 	    private StudentDAO dao;
-	    private ServletContext servletContext;
-	 @RequestMapping(value="/addStuPath", method=RequestMethod.GET)
-	    public ModelAndView addStuPath() {
+	   
+	 @RequestMapping(value="/stuAddPage", method=RequestMethod.GET)
+	    public ModelAndView stuAddPage(ModelMap model) {
+		 
+		
+		 
+		 
 	        StudentBean stuBean = new StudentBean();
 
 	        int i = dao.getId();
-	        String finalCourseString = "STU" + String.format("%03d", i);
-	        stuBean.setStuId(finalCourseString);
-	        return new ModelAndView("BUD003","stuBean",stuBean);
+	        String finalStuString = "STU" + String.format("%03d", i);
+	        
+	       stuBean.setStuId(finalStuString);
+	        return new ModelAndView("STU001","stuBean",stuBean);
 	    }
 	 @RequestMapping(value = "/updateStu" , method = RequestMethod.POST)
 	 public String updateStu(@ModelAttribute("stuBean")StudentBean stuBean,ModelMap model) {
@@ -50,7 +57,7 @@ public class StudentController {
 			if (stuBean.getStuName().isBlank() ) {
 				model.addAttribute("errorFill", "Fill the Blank!!!");
 				model.addAttribute("ststuBean", stuBean);
-				return "USR003.jsp";
+				return "USR003";
 			} else {
 				StudentResponseDTO res = new StudentResponseDTO();
 				StudentRequestDTO dto = new StudentRequestDTO();
@@ -88,8 +95,8 @@ public class StudentController {
 		 List<String> attendArray = stuBean.getStuAttend();
 		 if (stuBean.getStuName().isBlank() || stuBean.getStuDob().isBlank() || stuBean.getStuGender().isBlank()||stuBean.getStuPhone().isBlank() ||stuBean.getStuEducation().isBlank()) {
 				model.addAttribute("errorFill","Fill the Blank!!!" );
-				model.addAttribute("stuBean", stuBean);
-				return "";
+				
+				return "STU001";
 			}else {
 				StudentResponseDTO res = new StudentResponseDTO();
 				StudentRequestDTO dto = new StudentRequestDTO();
@@ -110,14 +117,18 @@ public class StudentController {
 				dao.insertStudentData(dto);
 				
 				model.addAttribute("errorFill", "Success Add");			
-				return "STU001.jsp";
+				return "STU001";
 				
 			}
 		}
 	 
 	 @RequestMapping(value = "/updateStuPage/{stuId}", method = RequestMethod.GET)
 		public ModelAndView updateStuPage(@PathVariable String userId) {
-			return new ModelAndView("updateUser", "stuBean", dao.selectId(userId));
+		 CourseStudentDAO csdao = new CourseStudentDAO();
+		 StudentResponseDTO res = dao.selectId(userId);
+		  res.setStuAttend(csdao.selectOne(userId));
+		 
+			return new ModelAndView("USR002", "stuBean", res );
 		}
 	 
 	 @RequestMapping(value = "/deleteStu/{stuId}", method = RequestMethod.GET)
@@ -135,11 +146,20 @@ public class StudentController {
 				return "redirect:/SearchStudentController";
 		}
 	 
-	 @RequestMapping(value = "/searchStuPage", method = RequestMethod.GET)
-		public ModelAndView searchStuPage() {
+	 @RequestMapping(value = "/stuSearchPage", method = RequestMethod.GET)
+		public ModelAndView stuSearchPage(ModelMap model) {
+		 
+			CourseStudentDAO csdao = new CourseStudentDAO();
+			List<StudentResponseDTO> list = dao.selectAll();
+			for(StudentResponseDTO a : list) {
+				List<String> clist = csdao.selectOne(a.getStuId());
+				a.setStuAttend(clist);   
+			}
+			model.addAttribute("stuList", list);
 			return new ModelAndView("STU003", "stuBean", new StudentBean());
 		}
 	 
+	
 	 @RequestMapping(value = "/searchStu", method = RequestMethod.POST)
 		public String searchStu(@ModelAttribute("stuBean") StudentBean stuBean, ModelMap model) {
 		 
@@ -159,7 +179,7 @@ public class StudentController {
 					a.setStuAttend(clist);   
 				}
 				model.addAttribute("stuList", showList);
-				return "STU003.jsp";
+				return "STU003";
 			} else {
 
 				if (searchId.isBlank() && searchName.isBlank()) {
@@ -228,7 +248,7 @@ public class StudentController {
 				model.addAttribute("stuList", showList);
 				
 
-				return "STU003.jsp";
+				return "STU003";
 			}
 	 }
 }

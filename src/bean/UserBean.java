@@ -6,6 +6,24 @@ public class UserBean {
 	private String userRole;
 	private String userPassword;
 	private String userConPassword;
+	private String searchUserId;
+	private String searchUserMail;
+
+	public String getSearchUserId() {
+		return searchUserId;
+	}
+
+	public void setSearchUserId(String searchUserId) {
+		this.searchUserId = searchUserId;
+	}
+
+	public String getSearchUserMail() {
+		return searchUserMail;
+	}
+
+	public void setSearchUserMail(String searchUserMail) {
+		this.searchUserMail = searchUserMail;
+	}
 
 	public String getUserConPassword() {
 		return userConPassword;

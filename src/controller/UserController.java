@@ -5,6 +5,8 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+
 import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -25,6 +27,7 @@ import org.springframework.web.servlet.ModelAndView;
 import bean.UserBean;
 import dao.UserDAO;
 import dto.UserRequestDTO;
+import dto.UserResponseDTO;
 
 @Controller
 public class UserController {
@@ -58,22 +61,31 @@ public class UserController {
 	public ModelAndView login() {
 		return new ModelAndView("LGN001", "userBean", new UserBean());
 	}
-
+	
+	@RequestMapping(value = "/addUserPage", method = RequestMethod.GET)
+	public ModelAndView addUserPage() {
+		return new ModelAndView("USR001", "userBean", new UserBean());
+	}
+	
+	
 	@RequestMapping(value = "/addUser", method = RequestMethod.POST)
-	public String addUser(@ModelAttribute("bean") UserBean bean, ModelMap model) {
+	public String addUser(@ModelAttribute("userBean") UserBean userBean, ModelMap model) {
 //        if(bs.hasErrors()) {
 //            return "addUser";
 //        }
-		if (bean.getUserMail().isBlank() || bean.getUserPassword().isBlank() || bean.getUserConPassword().isBlank()
-				|| bean.getUserRole().isBlank()) {
+		if (userBean.getUserMail().isBlank() || userBean.getUserPassword().isBlank() || userBean.getUserConPassword().isBlank()
+				|| userBean.getUserRole().isBlank()) {
 			model.addAttribute("errorFill", "Fill the Blank!!!");
 			return "USR001";
 		} else {
+			int i = dao.getId();
+			String stuIdString = String.format("%03d", i );
+			String finalString = "USR" + stuIdString;
 			UserRequestDTO dto = new UserRequestDTO();
-			dto.setUserId(bean.getUserId());
-			dto.setUserMail(bean.getUserMail());
-			dto.setUserPassword(bean.getUserPassword());
-			dto.setUserRole(bean.getUserRole());
+			dto.setUserId(finalString);
+			dto.setUserMail(userBean.getUserMail());
+			dto.setUserPassword(userBean.getUserPassword());
+			dto.setUserRole(userBean.getUserRole());
 			dao.insertUserData(dto);
 
 			model.addAttribute("errorFill", "Success Register!");
@@ -81,18 +93,78 @@ public class UserController {
 		}
 	}
 
-	@RequestMapping(value = "/updateUser/{userId}", method = RequestMethod.GET)
-	public ModelAndView updateUser(@PathVariable String userId) {
-		return new ModelAndView("updateUser", "bean", dao.selectId(userId));
+	@RequestMapping(value = "/updateUserPage/{userId}", method = RequestMethod.GET)
+	public ModelAndView updateUserPage(@PathVariable String userId,ModelMap model) {
+		
+		return new ModelAndView("USR002", "userBean", dao.selectId(userId));
+	}
+	
+	@RequestMapping(value = "/searchUserPage", method = RequestMethod.GET)
+	public ModelAndView searchUserPage( ModelMap model) {
+		List<UserResponseDTO> list = dao.selectAll();
+		model.addAttribute("userList", list);
+		return new ModelAndView("USR003", "userBean", new UserBean());
+	}
+	
+	
+	@RequestMapping(value = "/searchUser", method = RequestMethod.POST)
+	public ModelAndView searchUser(@ModelAttribute("userBean") UserBean userBean, ModelMap model) {
+		
+		
+		
+
+		List<UserResponseDTO> showList = new ArrayList<>();
+		if (userBean.getSearchUserId().isBlank() && userBean.getSearchUserMail().isBlank()) {
+			showList = dao.selectAll();
+			model.addAttribute("userList", showList);
+
+			return new ModelAndView("USR003", "userBean", new UserBean());
+		} else {
+			if (userBean.getSearchUserId().isBlank()) {
+				showList.add(dao.selectMail(userBean.getSearchUserMail()));
+			} else if (userBean.getSearchUserMail().isBlank()) {
+				showList.add(dao.selectId(userBean.getSearchUserId()));
+			} else {
+				showList.add(dao.selectIdAndMail(userBean.getSearchUserId(), userBean.getSearchUserMail()));
+
+			}
+
+			model.addAttribute("userList", showList);
+			return new ModelAndView("USR003", "userBean", new UserBean());
+		}
+	}
+	
+	
+	
+	
+	@RequestMapping(value = "/updateUserPage/updateUser", method = RequestMethod.POST)
+	public String updateUser(@ModelAttribute("userBean") UserBean userBean, ModelMap model) {
+//        if(bs.hasErrors()) {
+//            return "addUser";
+//        }
+		if (userBean.getUserMail().isBlank() || userBean.getUserPassword().isBlank() || userBean.getUserConPassword().isBlank()
+				|| userBean.getUserRole().isBlank()) {
+			model.addAttribute("errorFill", "Fill the Blank!!!");
+			return "USR002";
+		} else {
+			UserRequestDTO dto = new UserRequestDTO();
+			dto.setUserId(userBean.getUserId());
+			dto.setUserMail(userBean.getUserMail());
+			dto.setUserPassword(userBean.getUserPassword());
+			dto.setUserRole(userBean.getUserRole());
+			dao.updateUserData(dto);
+
+			model.addAttribute("errorFill", "Success Register!");
+			return "redirect:/searchUserPage";
+		}
 	}
 
-	@RequestMapping(value = "/deleteUser/{user_id}", method = RequestMethod.GET)
-	public String deleteuser(@PathVariable String userId, ModelMap model) {
+	@RequestMapping(value = "/deleteUser/{userId}", method = RequestMethod.GET)
+	public String deleteUser(@PathVariable String userId, ModelMap model) {
 		UserRequestDTO dto = new UserRequestDTO();
 		dto.setUserId(userId);
-		;
 		dao.deleteUserData(dto);
-		model.addAttribute("errorFill", "Success delete");
-		return "redirect:/USR003";
+		
+		return "redirect:/searchUserPage";
 	}
 }
