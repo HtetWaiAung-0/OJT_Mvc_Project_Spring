@@ -123,12 +123,12 @@ public class StudentController {
 		}
 	 
 	 @RequestMapping(value = "/updateStuPage/{stuId}", method = RequestMethod.GET)
-		public ModelAndView updateStuPage(@PathVariable String userId) {
+		public ModelAndView updateStuPage(@PathVariable String stuId) {
 		 CourseStudentDAO csdao = new CourseStudentDAO();
-		 StudentResponseDTO res = dao.selectId(userId);
-		  res.setStuAttend(csdao.selectOne(userId));
+		 StudentResponseDTO res = dao.selectId(stuId);
+		  res.setStuAttend(csdao.selectOne(stuId));
 		 
-			return new ModelAndView("USR002", "stuBean", res );
+			return new ModelAndView("STU002", "stuBean", res );
 		}
 	 
 	 @RequestMapping(value = "/deleteStu/{stuId}", method = RequestMethod.GET)
@@ -143,7 +143,7 @@ public class StudentController {
 			csdao.deleteData(csdto);
 				model.addAttribute("errorFill", "Success delete");
 				
-				return "redirect:/SearchStudentController";
+				return "redirect:/stuSearchPage";
 		}
 	 
 	 @RequestMapping(value = "/stuSearchPage", method = RequestMethod.GET)
@@ -166,8 +166,8 @@ public class StudentController {
 			StudentDAO dao = new StudentDAO();
 			CourseStudentDAO csdao = new CourseStudentDAO();
 			
-			String searchId = stuBean.getStuId();
-			String searchName = stuBean.getStuName();
+			String searchId = stuBean.getSearchId();
+			String searchName = stuBean.getSearchName();
 			String searchCourse = stuBean.getSearchCourse();
 			
 			List<CourseStudentResponseDTO> csList = new ArrayList<>();

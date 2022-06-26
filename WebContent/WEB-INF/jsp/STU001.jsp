@@ -37,7 +37,7 @@
 				</div> 
         <div class="col-md-1" >
             <input type="button" class="btn-basic" id="lgnout-button"
-						value="Log Out" onclick="location.href='LogOutController'">
+						value="Log Out" onclick="location.href='/MvcProjectWithSpring/logOut'">
         </div>        
     </div>
 </div>
@@ -150,25 +150,7 @@
                     <button type="submit" class="btn btn-secondary col-md-2" data-bs-toggle="modal" data-bs-target="#exampleModal">
                         Add
                     </button>
-                   <!--  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
-                    aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-centered">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="exampleModalLabel">Student Registration</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                    aria-label="Close"></button>
-                            </div>
-                            <div class="modal-body">
-                                <h5 style="color: rgb(127, 209, 131);">Registered Succesfully !</h5>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-success col-md-2" data-bs-dismiss="modal">Ok</button>
-                               
-                            </div>
-                        </div>
-                    </div>
-            </div> -->
+                  
                 </div>
 
     

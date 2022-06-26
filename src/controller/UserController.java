@@ -56,7 +56,18 @@ public class UserController {
 			return "LGN001";
 		}
 	}
-
+	
+	
+	
+	@RequestMapping(value = "/logOut", method = RequestMethod.GET)
+	public String login(HttpSession session) {
+		session.removeAttribute("loginName");
+		session.removeAttribute("loginPassword");
+		session.removeAttribute("date");
+		session.invalidate();
+		return "redirect:/";
+	}
+	
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public ModelAndView login() {
 		return new ModelAndView("LGN001", "userBean", new UserBean());

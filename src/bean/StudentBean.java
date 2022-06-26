@@ -11,9 +11,26 @@ public class StudentBean {
 	private String stuEducation ;
 	private List<String>stuAttend;
 	private String searchCourse;
+	private String searchId;
+	private String searchName;
+	
+	
+	public String getSearchName() {
+		return searchName;
+	}
+	public void setSearchName(String searchName) {
+		this.searchName = searchName;
+	}
 	public String getSearchCourse() {
 		return searchCourse;
 	}
+	public String getSearchId() {
+		return searchId;
+	}
+	public void setSearchId(String searchId) {
+		this.searchId = searchId;
+	}
+	
 	public void setSearchCourse(String searchCourse) {
 		this.searchCourse = searchCourse;
 	}

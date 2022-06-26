@@ -10,7 +10,7 @@
 <head>
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta path="viewport" content="width=device-width, initial-scale=1.0">
         <spring:url value="/resources/theme/css/test.css" var="testCss" />
 <link href="${testCss}" rel="stylesheet">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
@@ -37,7 +37,7 @@
 					<p>Current Date : ${sessionScope.date}</p>
 				</div>  
         <div class="col-md-1" >
-           <input type="button" class="btn-basic" id="lgnout-button" value="Log Out" onclick="location.href='LogOutController'">
+          <input type="button" class="btn-basic" id="lgnout-button" value="Log Out" onclick="location.href='/MvcProjectWithSpring/logOut'">
         </div>        
     </div>
     </div>
@@ -50,61 +50,50 @@
         <button class="dropdown-btn" > Class Management <i class="fa fa-caret-down"></i></button>
         
            <div class="dropdown-container">
-           <a href="courseAddPage">Course Registration </a>
-          <a href="stuAddPage">Student Registration </a>
-          <a href="stuSearchPage">Student Search </a>
+           <a href="/MvcProjectWithSpring/courseAddPage">Course Registration </a>
+          <a href="/MvcProjectWithSpring/stuAddPage">Student Registration </a>
+          <a href="/MvcProjectWithSpring/stuSearchPage">Student Search </a>
         </div>
-        <a href="searchUserPage">Users Management</a>
+        <a href="/MvcProjectWithSpring/searchUserPage">Users Management</a>
       </div>
       <div class="main_contents">
     <div id="sub_content">
-    <%-- <%
-    CourseDAO dao = new CourseDAO();
-    ArrayList<CourseResponseDTO> courseList = dao.selectAll();
-	
-	request.getServletContext().setAttribute("courseList", courseList);
-    %> --%>
-        <form:form action="UpdateStudentController" method="post" modelAttribute="stuBean">
-<c:forEach items="${stuList}" var = "a">
+   
+<form:form action="updateStu" method="post" modelAttribute="stuBean">
+
             <h2 class="col-md-6 offset-md-2 mb-5 mt-4">Student Details</h2>
             <div>${errorFill}</div>
             <div class="row mb-4">
                 <div class="col-md-2"></div>
-                <form:label for="studentID" class="col-md-2 col-form-form:label" path="stuId">Student ID</form:label>
+                <label for="studentID" class="col-md-2 col-form-label">Student ID</label>
                 <div class="col-md-4">
-                    <form:input type="text" class="form-control" id="studentID" path = "stuId" readonly="readonly"/>
+                   <form:input type="text" class="form-control"  id="studentID" path = "stuId" readonly="true"/>
                 </div>
             </div>
             <div class="row mb-4">
                 <div class="col-md-2"></div>
-                <form:label for="name" class="col-md-2 col-form-form:label" path="stuName">Name</form:label>
+                <label for="name" class="col-md-2 col-form-label">Name</label>
                 <div class="col-md-4">
-                    <form:input type="text" class="form-control" id="name" path = "stuName"/>
+                   <form:input type="text" class="form-control" id="name"  path = "stuName"/>
                 </div>
             </div>
             <div class="row mb-4">
                 <div class="col-md-2"></div>
-                <form:label for="dob" class="col-md-2 col-form-form:label" path="stuDob">DOB</form:label>
+                <label for="dob" class="col-md-2 col-form-label">DOB</label>
                 <div class="col-md-4">
-                    <form:input type="date" class="form-control" id="dob" path = "stuDob"/>
+                   <form:input type="date" class="form-control" id="dob" path = "stuDob" />
                 </div>
             </div>
             <fieldset class="row mb-4">
                 <div class="col-md-2"></div>
-                <legend class="col-form-form:label col-md-2 pt-0">Gender</legend>
+                <legend class="col-form-label col-md-2 pt-0">Gender</legend>
                 <div class="col-md-4">
                     <div class="form-check-inline">
-                        <form:input class="form-check-form:input" type="radio" name="gridRadios" id="gridRadios1" path = "stuGender"
-                            checked/>
-                        <form:label class="form-check-form:label" for="gridRadios1" path="stuGender">
-                            Male
-                        </form:label>
+                       
+                        <form:radiobutton class="form-check-input" id="gridRadios1" path="stuGender" value="male" label="Male"/>
                     </div>
                     <div class="form-check-inline">
-                        <form:input class="form-check-form:input" type="radio" name="gridRadios" id="gridRadios2" value="option2" path="stuGender"/>
-                        <form:label class="form-check-form:label" for="gridRadios2" path="stuGender">
-                            Female
-                        </form:label>
+                         <form:radiobutton class="form-check-input" id="gridRadios1" path="stuGender" value="female" label="FeMale"/>
                     </div>
     
                 </div>
@@ -112,26 +101,26 @@
     
             <div class="row mb-4">
                 <div class="col-md-2"></div>
-                <form:label for="phone" class="col-md-2 col-form-form:label" path="stuPhone">Phone</form:label>
+                <label for="phone" class="col-md-2 col-form-label">Phone</label>
                 <div class="col-md-4">
-                    <form:input type="text" class="form-control" id="phone" path = "stuPhone"/>
+                   <form:input type="text" class="form-control" id="phone"  path = "stuPhone"/>
                 </div>
             </div>
             <div class="row mb-4">
                 <div class="col-md-2"></div>
-                <form:label for="education" class="col-md-2 col-form-form:label" path="stuEducation">Education</form:label>
+                <label for="education" class="col-md-2 col-form-label">Education</label>
                 <div class="col-md-4">
-                    <select class="form-select" aria-form:label="Education" id="education" name = "stuEducation">
-                        <option  value="Bachelor of Information Technology" ${a.stuEducation.equals("Bachelor of Information Technology") ? 'selected' : '' }>Bachelor of Information Technology</option>
-                        <option value="Diploma in IT" ${a.stuEducation.equals("Diploma in IT") ? 'selected' : '' }>Diploma in IT</option>
-                        <option value="Bachelor of Computer Science" ${a.stuEducation.equals("Bachelor of Computer Science") ? 'selected' : '' } >Bachelor of Computer Science</option>
+                     <form:select class="form-select" id="education" path="stuEducation">
+                        <form:option value ="Bachelor of Information Technology">Bachelor of Information Technology</form:option>
+                        <form:option value="Diploma in IT">Diploma in IT</form:option>
+                        <form:option value="Bachelor of Computer Science">Bachelor of Computer Science</form:option>
     
-                    </select>
+                    </form:select>
                 </div>
             </div>
             <fieldset class="row mb-4">
             <div class="col-md-2"></div>
-                <legend class="col-form-form:label col-md-2 pt-0">Attend</legend>
+                <legend class="col-form-label col-md-2 pt-0">Attend</legend>
                <div class="col-md-4">
                     <c:forEach items="${applicationScope.courseList}" var = "data">
                     <div class="form-check-inline col-md-2">
@@ -141,11 +130,9 @@
                         </label>
                     </div>
                    </c:forEach>
-    
-                </div> 
-            </fieldset>
-           
-    
+    				
+                </div>
+            </fieldset>          
             <div class="row mb-4">
                 <div class="col-md-4"></div>
     
@@ -156,7 +143,7 @@
                             <span>Update</span>
                         </button>
                     
-    <a href="deleteStu/${a.stuId}">
+    <a href="/MvcProjectWithSpring/deleteStu/${stuId}">
                     <!-- Button trigger modal -->
                     <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal">
                        
@@ -171,10 +158,10 @@
     
     
     
-    </c:forEach>
+ 
     
-            </form:form>
-    </div>
+            </form:form>   
+             </div>
 </div>
 </div>
         <div id="testfooter">

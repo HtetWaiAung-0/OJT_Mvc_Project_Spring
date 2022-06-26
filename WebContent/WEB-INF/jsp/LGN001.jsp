@@ -26,7 +26,7 @@
 				</div>
 			</div>
 			<form:form class="login-form" action="login" method="post" >
-				<input type="text" placeholder="UserMail( defult = admin@gmail.com"  name="loginName" />
+				<input type="text" placeholder="UserMail( defult = admin@gmail.com"  name="loginMail" />
 				<input type="password" placeholder="Password( defult = 123)"  name="loginPassword" />
 				<button type="submit">login</button>
 				<p class="message">

@@ -37,7 +37,7 @@
 				</div> 
     <div class="col-md-1" >
        <input type="button" class="btn-basic" id="lgnout-button"
-						value="Log Out" onclick="location.href='LogOutController'">
+						value="Log Out" onclick="location.href='/MvcProjectWithSpring/logOut'">
     </div>        
 </div>
 </div>

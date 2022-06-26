@@ -37,7 +37,7 @@
 				</div> 
         <div class="col-md-1" >
             <input type="button" class="btn-basic" id="lgnout-button"
-						value="Log Out" onclick="location.href='LogOutController'">
+						value="Log Out" onclick="location.href='/MvcProjectWithSpring/logOut'">
         </div>        
     </div>
 </div>
@@ -49,12 +49,12 @@
         
         <button class="dropdown-btn" > Class Management <i class="fa fa-caret-down"></i></button>
         
-            <div class="dropdown-container">
-           <a href="courseAddPage">Course Registration </a>
-          <a href="stuAddPage">Student Registration </a>
-          <a href="stuSearchPage">Student Search </a>
+           <div class="dropdown-container">
+           <a href="/MvcProjectWithSpring/courseAddPage">Course Registration </a>
+          <a href="/MvcProjectWithSpring/stuAddPage">Student Registration </a>
+          <a href="/MvcProjectWithSpring/stuSearchPage">Student Search </a>
         </div>
-        <a href="searchUserPage">Users Management</a>
+        <a href="/MvcProjectWithSpring/searchUserPage">Users Management</a>
       </div>
       <div class="main_contents">
     <div id="sub_content">
